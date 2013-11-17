@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<title>Image color picker</title>
+<script src=//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js></script>
+<script src=jquery.ImageColorPicker.js></script>
+<body>
+    <style> * {margin:0;padding:0;}
+        body, html {height:80%;text-align:center;}
+        .hidden {display:none;}
+        #dropzone{border: 2px dashed #bbb;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;
+            padding:25px;margin:40px;text-align:center;font:40px bold 'Vollkorn';color:#bbb; height:60%;}
+    </style>
+    <div id=dropzone>Drop your image here
+    </div>
+    <div id=go class=hidden>Go!</div>
+    <script>
+        function handleFileSelect(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+
+            document.querySelector('#dropzone').classList.add('hidden');
+        }
+
+        function handleDragOver(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            evt.dataTransfer.dropEffect = 'copy';
+        }
+
+        var dropZone = document.getElementById('dropzone');
+        dropZone.addEventListener('dragover', handleDragOver, false);
+        dropZone.addEventListener('drop', handleFileSelect, false);
+    </script>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<title>Welcome to an experience</title>
+<body>
+    <style> * {margin:0;padding:0;}
+        body, html {height:80%;text-align:center;}
+        .hidden {display:none;}
+        #dropzone{border: 2px dashed #bbb;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;
+            padding:25px;margin:40px;text-align:center;font:40px bold 'Vollkorn';color:#bbb; height:60%;}
+        #go{padding:25px;font:20px bold 'Vollkorn';color:#bbb;background:#333;width:40%;margin:40px auto;}
+        #go:hover{cursor:pointer;}
+        .info{font:18px normal 'Arial';padding-bottom:40px;}
+    </style>
+    <div id=dropzone>Drop data.txt file here
+    </div>
+    <span class=info>These coordinates will draw objects of a cluster as one shape, and another cluster as another shape. This also goes for color. The coordinates are form 0 to 1 and works as MatLab does. That means point (0, 0) is in the top left, and (1,1) is in the bottom right.<br><br>The format is:<br><br>
+    Coords: x y<br>Cluster size: 2<br>0.21325 0.20888<br>0.32123 0.31234<br>
+    Cluster size: 3<br>0.02312 0.12315<br>0.13721 0.12317<br>0.86762 0.02312<br>
+    Cluster size: 2<br>0.32146 0.22391<br>0.92923 0.90234</span>
+    <div id=go class=hidden>Go!</div>
+    <script>
+        function handleFileSelect(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+
+            document.querySelector('#dropzone').classList.add('hidden');
+            document.querySelector('.info').classList.add('hidden');
+            document.querySelector('#go').classList.remove('hidden');
+
+            var fileList = evt.dataTransfer.files;
+
+            for(var i = 0, f; f = fileList[i]; i++) {
+                var reader = new FileReader();
+
+                reader.onload = (function(file) {
+                    return function(e) {
+                        var contents = e.target.result.split("\n");
+                        var dataInputSet = [];
+                        var tempGroup = [];
+                        var tempColor = 0xffffff*Math.random()|0;
+
+                        for(var j = 0; j < contents.length; j++) {
+                            var tempContents = contents[j].split(" ");
+                            if(tempContents.length > 2 && j > 1) {
+                                dataInputSet.push({color:tempColor, groups:tempGroup});
+                                tempGroup = [];
+                                tempColor = 0xffffff*Math.random()|0;
+                            }
+                            if(tempContents.length == 2) {
+                                tempGroup.push(tempContents.map(function(x){
+                                    numX=+x;
+                                    if(numX < 0.5) {
+                                        numX /= 0.5;
+                                        numX = 1.0-numX;
+                                        numX *= 500;
+                                    } else {
+                                        numX /= 0.5;
+                                        numX = numX-1.0;
+                                        numX *= -500;
+                                    }
+                                    return tempContents.indexOf(x) == 0 ? -numX : numX;
+                                }));
+                            }
+                        }
+                        dataInputSet.push({color:tempColor, groups:tempGroup});
+
+                        if(dataInputSet.length) {
+                            window.localStorage["dataInputSet"] = JSON.stringify(dataInputSet);
+                        }
+                    }
+                })(f);
+
+                reader.readAsText(f);
+
+            }
+        }
+
+        function handleDragOver(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            evt.dataTransfer.dropEffect = 'copy';
+        }
+
+        function handleClick(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            window.location.href = "/view.html";
+        }
+
+        var dropZone = document.getElementById('dropzone');
+        dropZone.addEventListener('dragover', handleDragOver, false);
+        dropZone.addEventListener('drop', handleFileSelect, false);
+
+        var goButton = document.getElementById('go');
+        go.addEventListener('click', handleClick, false);
+    </script>
