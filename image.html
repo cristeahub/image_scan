@@ -15,15 +15,20 @@
         #go:hover{cursor:pointer;}
         #undo{padding:25px;font:20px bold 'Vollkorn';color:#333;background:#bbb;width:40%;margin:40px auto;}
         #undo:hover{cursor:pointer;}
+        #back{padding:25px;font:20px bold 'Vollkorn';color:#222;background:#ccc;width:40%;margin:40px auto;}
+        #back:hover{cursor:pointer;}
         #your-colors{list-style-type:none;padding:0;}
         #your-colors li{font-family:'Arial';margin:5px;padding:5px;color:#fff;display:inline;text-shadow:-1px -1px 0 #000,1px -1px 0 #000;}
+        .info-data{padding:20px;font:18px normal 'Arial';}
     </style>
+    <div class=info-data>Please select the colors of each object. Select the approxmiate background color as last element.</div>
     <div id=dropzone>Drop your image here
     </div>
     <img id=img>
     <ul id=your-colors></ul>
     <div id=undo class=hidden>Undo</div>
     <div id=go class=hidden>Go!</div>
+    <a href=/index.html id=back>Back</a>
     <script>
         var chosenColors = [];
 
@@ -51,6 +56,8 @@
             }
 
             download('colors.txt', output);
+
+            window.location.href = "/index.html";
         }
 
         function download(filename, text) {
