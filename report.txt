@@ -1,0 +1,16 @@
+\section{Intro}
+We used a combination of JavaScript and Matlab to make this project. The idea is to have a somewhat smooth experience when using WebGL and MatLab combined.
+
+\section{User experience}
+We tried to make the transition from the browser to MatLab as smooth as possible. This is achieved by easy downloading, drag and drop to upload, and very clear directions. You can upload a picture to download the required input file for MatLab, and upload the output file from MatLab to get a view instantly in 3D.
+
+The image can be uploaded through our site, and colors are chosen. When the colors are chosen a parser will process the colors and output a file that can be read by MatLab.
+
+\section{Graphics}
+The graphics are done by WebGL and a magnificent framework called THREE.js. WebGL is surely the future, and is supported by every operating system that runs for instance Chrome, but also many other browsers. WebGL is based on OpenGL ES 2.0 and have a programmable pipeline. This makes it very nice to work with.
+
+For this task we used a couple of techniques. Firstly we have an input that needs to be parsed. The parser makes an object which makes an object with a structure we can use. Also the input coordinates are from 0 to 1, so the parser also translates this into the right coordinates for WebGL. In MatLab the pixel coordinate (1,1) is in the top left corner. The origo in WebGL is in the middle of the screen.
+
+For every group of objects a new color is chosen. Then they are added one by one in a group, so that they can be manipulated in a certan way (keeping a reference to each object). The geometry is piced by a list of objects that can be made. In addition to a random color a number is written on each object denoting the amount of objects for this group. This is written in the complimentary color to be sure it's visible. For each object a 3D object of a number is placed above which also says how many items there are in that group.
+
+There is also added a control tool to make zooming in and out possible for a better experience.
