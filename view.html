@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <title>WebGL project</title>
-<script src=//cdnjs.cloudflare.com/ajax/libs/three.js/r61/three.min.js></script>
+<script src=//cdnjs.cloudflare.com/ajax/libs/three.js/r57/three.min.js></script>
+<script src=res/optimer_regular.typeface.js></script>
+<script src=res/OrbitControls.js></script>
 <style>
     *{margin:0;padding:0}
 </style>
 <body>
 <script>
-    var MAGIC_NUMBER = 30;
+    var MAGIC_NUMBER = 60;
     var origo = new THREE.Vector3(0, 0, 0);
 
     var dataInputSet = JSON.parse(window.localStorage["dataInputSet"]) ||
@@ -74,9 +76,10 @@
         return canvas;
     }
 
-    var camera, scene, renderer;
+    var camera, scene, renderer, controls;
 
     var group = new THREE.Object3D();
+    var numbers = [];
 
     var geometryPicker = {
         0: new THREE.SphereGeometry(MAGIC_NUMBER, MAGIC_NUMBER, MAGIC_NUMBER),
@@ -92,12 +95,13 @@
         document.body.appendChild(renderer.domElement);
 
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.2, 10000);
-        camera.position.z = 1200;
+        camera.position.z = 2200;
 
         scene = new THREE.Scene();
 
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-        var background = new THREE.Mesh(new THREE.CubeGeometry(1000,800,20), new THREE.MeshBasicMaterial({color:0xcccccc}));
+        var background = new THREE.Mesh(new THREE.CubeGeometry(2500,1800,20), new THREE.MeshBasicMaterial({color:0xcccccc}));
         background.position = new THREE.Vector3(0, 0, -100);
         scene.add(background);
 
@@ -115,6 +119,26 @@
                 newObject.position.x = dataInputSet[i].groups[j][0];
                 newObject.position.y = dataInputSet[i].groups[j][1];
                 innerGroup.add(newObject);
+
+                var num3d = new THREE.TextGeometry(dataInputSet[i].groups.length, {
+                    size: MAGIC_NUMBER * 0.5,
+                    height: 10,
+                    curveSegments: 4,
+                    font: "optimer",
+                    weight:"normal",
+                    style:"normal",
+                    bevelThickness: 1,
+                    bevelSize: 1,
+                    bevelEnabled: true,
+                });
+
+                var text = new THREE.Mesh(num3d, material);
+                text.position.x = dataInputSet[i].groups[j][0];
+                text.position.y = dataInputSet[i].groups[j][1] + 60;
+                text.position.z = 0;
+
+                numbers.push(text);
+                scene.add(text);
             }
             group.add(innerGroup);
         }
@@ -129,12 +153,17 @@
 
     function animate() {
         requestAnimationFrame(animate);
+        controls.update();
 
         for(var i = 0; i < group.children.length; i++) {
             for(var j = 0; j < group.children[i].children.length; j++) {
                 group.children[i].children[j].rotation.y += i&1? 0.04 : -0.06;
                 group.children[i].children[j].rotation.z += i&0? 0.04 : -0.03;
             }
+        }
+
+        for(var i = 0; i < numbers.length; i++) {
+            numbers[i].rotation.y += 0.04;
         }
 
         renderer.render(scene, camera);

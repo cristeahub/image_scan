@@ -53,11 +53,11 @@
                                     if(numX < 0.5) {
                                         numX /= 0.5;
                                         numX = 1.0-numX;
-                                        numX *= 500;
+                                        numX *= 1000;
                                     } else {
                                         numX /= 0.5;
                                         numX = numX-1.0;
-                                        numX *= -500;
+                                        numX *= -1000;
                                     }
                                     return tempContents.indexOf(x) == 0 ? -numX : numX;
                                 }));
