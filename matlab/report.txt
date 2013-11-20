@@ -1,0 +1,22 @@
+\section{Image processing}
+\subsection{Naive implementation}
+First we did a naive implementation where we choose an epsilon and went through each color checking if each component in the
+RGB representation was closer to this color than epsilon. Then taking only the part of the picture that satisfies this, we erode the 
+image to make sure the connected components have a certain size. Then we find the connected components using the built-in matlab function
+$bwconncomps$. This also gives us the centroid of each connected component. From there the coordinates of the centroids are scaled to be 
+between $0$ and $1$ so that it can be ported to WebGL.
+
+\subsection{Pro uberman filtered superplementation}
+In this implementation we take the RGB representation of the colors and transform them into the L*a*b space. Using this space we should be able to
+lose less of the variation because of lightning, by only making sure that our colors look alike in the a* and b* dimensions, since the L dimension is the
+lightness representation of the color. This is done by letting matlab take care of the tranformation through the use of the function $applycform$. The colors
+used to identify different object are taken from a file on the hard drive. The colors are then made into a matlab picture so that it can transform it into the L*a*b* space
+Now that both colors are in the same space we find euclidean distance between each pixel and the colors read from file. Then each pixel is labeled to be closest to one of the
+colors. 
+From this we pick these pixels from the image and make segmented images which only holds the pixels denoted to each color. From here we go through each color and find the connected components
+for each of these colors pictures (fucka setning color sitt bilde!!!!!!!!). When we look at the pictures of how it segments the colors, it does very well but from here on we should remove noise 
+and fill in the holes in the picture so we can get the correct connected components. We have tried filtering using average and median filtering among others. None of these seem to do the job and
+so this implementation actually performs worse than the naive implementation. One way we could try to improve this is to make sure the connected components are of a certain size so that we get rid of 
+even more of the noise etc. NOE MER?!
+From this point in the program we do as in the naive implementation. Normalizing the coordinates and writing to a file so that the coordinates can be exported to WebGL. 
+
