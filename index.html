@@ -11,7 +11,7 @@
         .info{font:18px normal 'Arial';padding-bottom:40px;}
         .missing-data{padding:20px;font:18px normal 'Arial';}
     </style>
-    <a href=/image.html class=missing-data>Missing colors.txt for the Matlab Code? Click here!</a>
+    <a href=image.html class=missing-data>Missing colors.txt for the Matlab Code? Click here!</a>
     <div id=dropzone>Drop data.txt file here
     </div>
     <span class=info>These coordinates will draw objects of a cluster as one shape, and another cluster as another shape. This also goes for color. The coordinates are form 0 to 1 and works as MatLab does. That means point (0, 0) is in the top left, and (1,1) is in the bottom right.<br><br>The format is:<br><br>
@@ -85,7 +85,7 @@
         function handleClick(evt) {
             evt.stopPropagation();
             evt.preventDefault();
-            window.location.href = "/view.html";
+            window.location.href = "view.html";
         }
 
         var dropZone = document.getElementById('dropzone');
